@@ -95,7 +95,7 @@ export const Game = forwardRef((props, ref) => {
     return (<>{
         team ? 
             <div className="w-full h-full flex flex-col justify-start items-center grow">
-                <div className="w-full h-full flex flex-row justify-between">
+                <div className="w-full h-full flex flex-row justify-between z-10">
                     <div className="grow w-[20%] flex items-center justify-center">
                         <div className="w-full h-full flex flex-col justify-between">
                             <div className="w-full flex flex-col items-end">
@@ -140,8 +140,14 @@ export const Game = forwardRef((props, ref) => {
                         <div>
                             Action log here
                         </div>
-                        <div>
-                            <button className={`p-2 bg-zinc-500 rounded-sm box-border ${game.Turn == team ? "border-2" : ""}`} onClick={() => {
+                        <div className="flex flex-col gap-1">
+                            <button className={`p-2 rounded-sm box-border ${game.Turn == team && current.length > 0 ? "bg-zinc-400" : "bg-zinc-500"}`} onClick={() => {
+                                if (game.Turn == team && current.length > 0) {
+                                    setSack()
+                                    setCurrent([])
+                                }
+                            }}>Clear Targets</button>
+                            <button className={`p-2 rounded-sm box-border ${game.Turn == team ? current.length == 0 && targets.length == 0 ? "bg-amber-500" : "bg-zinc-400" : "bg-zinc-500"}`} onClick={() => {
                                 if (game.Turn == team) {
                                     setSack()
                                     endTurn(team)
@@ -162,12 +168,12 @@ export const Game = forwardRef((props, ref) => {
                                     sack == data.UUID && !sacked ? 
                                         <div className="absolute">
                                             <div className="absolute top-[-24px] flex justify-between" style={{width: `${ tileSize*.9 }px`}}>
-                                                <button className="bg-blue-500 box-border border-2 px-2 rounded-full font-bold w-8 h-4" onClick={() => {
+                                                <button className="bg-blue-400 px-2 rounded-full font-bold w-8 h-4" onClick={() => {
                                                     setSack()
                                                     setCurrent([])
                                                     sackCard(team, data.UUID, "Mana")
                                                 }}/>
-                                                <button className="bg-amber-500 box-border border-2 px-2 rounded-full font-bold w-8 h-4" onClick={() => {
+                                                <button className="bg-amber-400 px-2 rounded-full font-bold w-8 h-4" onClick={() => {
                                                     setSack()
                                                     setCurrent([])
                                                     sackCard(team, data.UUID, "Cards")

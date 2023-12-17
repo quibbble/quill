@@ -12,19 +12,22 @@ module.exports = {
   ],
   safelist: [
     "font-['coquette']",
-    "text-yellow-500",
     "max-w-xl",
     {
-      pattern: /bg-(red|green|blue|yellow|orange|pink|purple|teal)-500/,
+      pattern: /bg-(red|rose|green|lime|blue|indigo|yellow|orange|pink|purple|teal|zinc|amber)-(100|200|300|400|500|600|700|800|900)/,
     },
     {
-      pattern: /text-(red|green|blue|yellow|orange|pink|purple|teal)-500/,
+      pattern: /text-(red|rose|green|lime|blue|indigo|yellow|orange|pink|purple|teal|zinc|amber)-(100|200|300|400|500|600|700|800|900)/,
     },
     {
-      pattern: /border-(red|green|blue|yellow|orange|pink|purple|teal)-500/,
+      pattern: /border-(red|rose|green|lime|blue|indigo|yellow|orange|pink|purple|teal|zinc|amber)-(100|200|300|400|500|600|700|800|900)/,
     },
     {
-      pattern: /fill-(red|green|blue|yellow|orange|pink|purple|teal)-500/,
+      pattern: /fill-(red|rose|green|lime|blue|indigo|yellow|orange|pink|purple|teal|zinc|amber)-(100|200|300|400|500|600|700|800|900)/,
     },
+    {
+      pattern: /border-(t|b|l|r)-(red|rose|green|lime|blue|indigo|yellow|orange|pink|purple|teal|zinc|amber)-(100|200|300|400|500|600|700|800|900)/,
+    },
+    
   ]
 }
