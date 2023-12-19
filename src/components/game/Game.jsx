@@ -2,6 +2,10 @@ import React, { useEffect, useState, forwardRef, useCallback } from "react";
 import { Card } from "./Card";
 import { Unit } from "./Unit";
 import { Tile } from "./Tile";
+import { Display } from "./Display";
+import { LuDroplet } from "react-icons/lu";
+import { GiCardPick, GiCardRandom } from "react-icons/gi";
+import { Log } from "./Log";
 
 export const Game = forwardRef((props, ref) => {
     // eslint-disable-next-line no-unused-vars
@@ -44,15 +48,31 @@ export const Game = forwardRef((props, ref) => {
     const mana = game?.MoreData.Mana
     const range = game?.MoreData.PlayRange
     const sacked = game && team && game.Turn == team ? game.MoreData.Sacked[team] : true
-    const targets = game?.Targets
+    const logs = game ? game.Actions : []
+    const [targets, setTargets] = useState([]);
+    useEffect(() => {
+        setTargets(game ? game.Targets : [])
+    }, [game])
+    // let targets = game?.Targets
 
     // targeting
     const [current, setCurrent] = useState([]);
     const [sack, setSack] = useState(null);
     useEffect(() => nextTargets(team, []), [team])
-    useEffect(() => nextTargets(team, current), [current])
     useEffect(() => {
-        if (current.length > 0 && targets.length == 0) {
+        if (current.length == 2 && current[0] == current[1]) return
+        nextTargets(team, current)
+    }, [current])
+    useEffect(() => {
+        if (current.length == 1 && targets.length == 0) {
+            setTargets(current)
+        } else if (current.length == 2 && current[0] == current[1]) {
+            setSack()
+            setCurrent([])
+            if (hand[team].reduce((acc, val) => acc + (val.UUID == current[0] ? 1 : 0), 0) == 1) {
+                playCard(team, current[0], [])
+            }
+        } else if (current.length > 0 && targets.length == 0) {
             setSack()
             setCurrent([])
             if (hand[team].reduce((acc, val) => acc + (val.UUID == current[0] ? 1 : 0), 0) == 1) {
@@ -66,6 +86,9 @@ export const Game = forwardRef((props, ref) => {
             }
         }
     }, [current, targets])
+
+    // display
+    const [display, setDisplay] = useState();
 
     // board must stay at a 7x6 width to height ratio
     const scale = 0.66;
@@ -99,16 +122,16 @@ export const Game = forwardRef((props, ref) => {
                     <div className="grow w-[20%] flex items-center justify-center">
                         <div className="w-full h-full flex flex-col justify-between">
                             <div className="w-full flex flex-col items-end">
-                                <p>Mana { mana[opponent].Amount }/{ mana[opponent].BaseAmount }</p>
-                                <p>Deck { deck[opponent] }/{ 30 }</p>
-                                <p>Hand { hand[opponent].length }/{ 10 }</p>
+                                <p className="inline-block font-bold"><LuDroplet className="text-blue-500 align-middle inline-flex" /> { mana[opponent].Amount }/{ mana[opponent].BaseAmount }</p>
+                                <p className="inline-block font-bold"><GiCardPick className="text-orange-500 align-middle inline-flex" /> { deck[opponent] }/{ 30 }</p>
+                                <p className="inline-block font-bold"><GiCardRandom className="text-yellow-500 align-middle inline-flex" /> { hand[opponent].length }/{ 10 }</p>
                             </div>
                             <div>
-                                Display card on hover here
+                                <Display data={ display } width={ tileSize*2 } height={ tileSize*3 } />
                             </div>
                             <div className="w-full flex flex-col items-end">   
-                                <p>Mana { mana[team].Amount }/{ mana[team].BaseAmount }</p>
-                                <p>Deck { deck[opponent] }/{ 30 }</p>
+                                <p className="inline-block font-bold"><LuDroplet className="text-blue-500 align-middle inline-flex" /> { mana[team].Amount }/{ mana[team].BaseAmount }</p>
+                                <p className="inline-block font-bold"><GiCardPick className="text-orange-500 align-middle inline-flex" /> { deck[team] }/{ 30 }</p>
                             </div>
                         </div>
                     </div>
@@ -124,6 +147,8 @@ export const Game = forwardRef((props, ref) => {
                                                 tile.Unit ? 
                                                     <Unit data={ tile.Unit } target={ targets.includes(tile.Unit.UUID) } team={ game.MoreData.UUIDToTeam[tile.Unit.Player] } onClick={() => {
                                                         if (targets.includes(tile.Unit.UUID)) setCurrent(old => [...old, tile.Unit.UUID])
+                                                    }} onMouseEnter={() => {
+                                                        setDisplay(tile.Unit)
                                                     }} /> : 
                                                     <Tile uuid={ tile.UUID } target={ targets.includes(tile.UUID) } onClick={() => {
                                                         if (targets.includes(tile.UUID)) setCurrent(old => [...old, tile.UUID])
@@ -137,12 +162,12 @@ export const Game = forwardRef((props, ref) => {
                     } 
                     </div>
                     <div className="grow w-[20%] flex flex-col justify-between">
-                        <div>
-                            Action log here
+                        <div className="h-64 w-full">
+                            <Log logs={ logs } />
                         </div>
                         <div className="flex flex-col gap-1">
-                            <button className={`p-2 rounded-sm box-border ${game.Turn == team && current.length > 0 ? "bg-zinc-400" : "bg-zinc-500"}`} onClick={() => {
-                                if (game.Turn == team && current.length > 0) {
+                            <button className={`p-2 rounded-sm box-border ${game.Turn == team && (current.length > 0 || sack) ? "bg-zinc-400" : "bg-zinc-500"}`} onClick={() => {
+                                if (game.Turn == team && (current.length > 0 || sack)) {
                                     setSack()
                                     setCurrent([])
                                 }
@@ -150,6 +175,7 @@ export const Game = forwardRef((props, ref) => {
                             <button className={`p-2 rounded-sm box-border ${game.Turn == team ? current.length == 0 && targets.length == 0 ? "bg-amber-500" : "bg-zinc-400" : "bg-zinc-500"}`} onClick={() => {
                                 if (game.Turn == team) {
                                     setSack()
+                                    setCurrent([])
                                     endTurn(team)
                                 }
                             }}>End Turn</button>
@@ -161,7 +187,7 @@ export const Game = forwardRef((props, ref) => {
                     {
                         hand[team].map((data, idx) => 
                             <div key={ idx } style={{width: `${ tileSize*.9 }px`, height: `${ tileSize*.9 }px`}} onClick={() => {
-                                if (current.length == 0 && targets.includes(data.UUID)) setCurrent(old => [...old, data.UUID])
+                                if (targets.includes(data.UUID)) setCurrent(old => [...old, data.UUID])
                                 if (!sack && !sacked) setSack(data.UUID)
                             }}>
                                 {
@@ -181,7 +207,9 @@ export const Game = forwardRef((props, ref) => {
                                             </div>
                                         </div> : null
                                 }
-                                <Card data={ data } team={ team } target={ !sack && (targets.includes(data.UUID) || !sacked) } /> 
+                                <Card data={ data } team={ team } target={ (!sack || sack == data.UUID) && (targets.includes(data.UUID) || !sacked) } onMouseEnter={() => {
+                                    setDisplay(data)
+                                }} /> 
                             </div>
                         )
                     }
