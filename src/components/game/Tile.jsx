@@ -5,6 +5,6 @@ export const Tile = forwardRef((props, ref) => {
     const { uuid, target, ...other } = props;
 
     return (
-        <div key={ uuid } className={`w-dull h-full box-border rounded-sm ${ target ? "bg-zinc-700 cursor-pointer" : "bg-zinc-900" }`} { ...other } />
+        <div key={ uuid } className={`w-dull h-full box-border rounded-sm ${ target ? "bg-zinc-500 cursor-pointer" : "bg-zinc-700" }`} { ...other } />
     )
 })

@@ -33,7 +33,7 @@ const replace = (text) => {
         <span key={ match+i } className="text-red-500 font-bold">{ match.substring(1, match.length-1) }</span>
     ));
     replaced = reactStringReplace(replaced, "'Unit'", (match, i) => (
-        <span key={ match+i } className="text-slate-500 font-bold">{ match.substring(1, match.length-1) }</span>
+        <span key={ match+i } className="text-slate-400 font-bold">{ match.substring(1, match.length-1) }</span>
     ));
 
     // unit attributes
@@ -52,7 +52,7 @@ const replace = (text) => {
 
     // traits
     replaced = reactStringReplace(replaced, "'Range'", (match, i) => (
-        <GiCrossbow key={ match+i } className="text-yellow-500 align-middle inline-flex" />
+        <GiCrossbow key={ match+i } className="text-red-500 align-middle inline-flex" />
     ));
     return replaced
 };
@@ -61,6 +61,12 @@ const unitColors = (type) => {
     if (type == "Creature") return "text-green-500"
     else if (type == "Structure") return "text-yellow-500"
     else if (type == "Base") return "text-red-500"
+}
+
+const damageType = (type) => {
+    if (type == "Physical") return <LuSword className="text-red-500" />
+    else if (type == "Magic") return <BsStars className="text-blue-500" />
+    else if (type == "Ranged") return <GiCrossbow className="text-red-500" />
 }
 
 const top = "absolute block w-0 h-0 border-[5px] border-solid border-transparent border-t-0 top-0"
@@ -116,7 +122,7 @@ export const Display = forwardRef((props, ref) => {
                                 <div className={`${ topRight } border-b-${ color(data?.Codex[7]) }`}/>
                             </div>
                             <div className="flex justify-between font-bold w-full px-[.75rem] pb-[1.4rem]">
-                                <p className={`flex items-center justify-center ${ data.Attack > data.Init.Attack ? "text-green-500" : data.Attack < data.Init.Attack ? "text-red-500" : "" }`}><LuSword className="text-red-500" /> { data.Attack }</p>
+                                <p className={`flex items-center justify-center ${ data.Attack > data.Init.Attack ? "text-green-500" : data.Attack < data.Init.Attack ? "text-red-500" : "" }`}>{ damageType(data.DamageType) } { data.Attack }</p>
                                 <p className={`flex items-center justify-center ${ data.Cooldown > data.Init.Cooldown ? "text-red-500" : data.Cooldown < data.Init.Cooldown ? "text-green-500" : "" }`}><LuHourglass className="text-amber-500" /> { data.Cooldown > 0 ? data.Cooldown : 0 }</p>
                                 <p className={`flex items-center justify-center ${ data.Health > data.Init.Health ? "text-green-500" : data.Health < data.Init.Health ? "text-red-500" : "" }`}><LuHeart className="text-green-500" /> { data.Health }</p>
                             </div>

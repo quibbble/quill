@@ -166,13 +166,13 @@ export const Game = forwardRef((props, ref) => {
                             <Log logs={ logs } />
                         </div>
                         <div className="flex flex-col gap-1">
-                            <button className={`p-2 rounded-sm box-border ${game.Turn == team && (current.length > 0 || sack) ? "bg-zinc-400" : "bg-zinc-500"}`} onClick={() => {
+                            <button className={`p-2 rounded-sm box-border ${game.Turn == team && (current.length > 0 || sack) ? "bg-amber-500" : "bg-zinc-900"}`} onClick={() => {
                                 if (game.Turn == team && (current.length > 0 || sack)) {
                                     setSack()
                                     setCurrent([])
                                 }
                             }}>Clear Targets</button>
-                            <button className={`p-2 rounded-sm box-border ${game.Turn == team ? current.length == 0 && targets.length == 0 ? "bg-amber-500" : "bg-zinc-400" : "bg-zinc-500"}`} onClick={() => {
+                            <button className={`p-2 rounded-sm box-border ${game.Turn == team ? current.length == 0 && targets.length == 0 ? "bg-amber-500" : "bg-amber-500" : "bg-zinc-900"}`} onClick={() => {
                                 if (game.Turn == team) {
                                     setSack()
                                     setCurrent([])
@@ -183,7 +183,7 @@ export const Game = forwardRef((props, ref) => {
                     </div>
                 </div>
                 <hr className="my-4"/>
-                <div className="flex justify-center w-full space-x-4">
+                <div className="flex justify-center gap-2">
                     {
                         hand[team].map((data, idx) => 
                             <div key={ idx } style={{width: `${ tileSize*.9 }px`, height: `${ tileSize*.9 }px`}} onClick={() => {

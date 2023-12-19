@@ -33,7 +33,7 @@ export const Log = forwardRef((props, ref) => {
                 <div className="flex flex-col gap-1 h-full overflow-scroll no-scrollbar">
                 { 
                     logs ? logs.map((log, i) => 
-                        <div className={`bg-${ log.Team }-500 p-1 text-xs rounded-sm`} key={ i }>{ build(log) }</div>
+                        <div className={`bg-zinc-800 text-${ log.Team }-500 p-1 text-xs rounded-sm`} key={ i }>{ build(log) }</div>
                     ) : null
                 }
                     <div ref={logsEndRef} />

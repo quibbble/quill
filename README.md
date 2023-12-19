@@ -1,7 +1,7 @@
 # Quill
 
 ## TODO
-- Allow 10 cards in hand without cards being resized.
+- Show what items and traits a unit has.
 
 KEYWORDS
 - Attack
