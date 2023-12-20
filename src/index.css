@@ -3,6 +3,15 @@
 @tailwind utilities;
 
 @layer utilities {
+    .text-2xs {
+        font-size: 0.5rem;
+    }
+    .text-3xs {
+        font-size: 0.45rem;
+    }
+}
+
+@layer utilities {
     /* Hide scrollbar for Chrome, Safari and Opera */
     .no-scrollbar::-webkit-scrollbar {
         display: none;

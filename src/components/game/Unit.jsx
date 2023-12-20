@@ -28,7 +28,7 @@ export const Unit = forwardRef((props, ref) => {
                 <div className={`${ botLeft } border-b-${ color(data?.Codex[6]) }`}/>                
                 <div className={`${ topRight } border-b-${ color(data?.Codex[7]) }`}/>
 
-                <div className="w-full h-full flex flex-col items-center gap-2 justify-center font-bold leading-none text-xs p-2">
+                <div className="w-full h-full flex flex-col items-center md:gap-2 justify-center font-bold leading-none text-3xs md:text-xs p-2">
                     {
                         hand ?
                             <p className={`self-start flex items-center justify-center ${ data.Cost > data.Init.Cost ? "text-green-500" : data.Cost < data.Init.Cost ? "text-red-500" : "text-zinc-100" }`}><LuDroplet className="text-blue-500" /> { data.Cost }</p>

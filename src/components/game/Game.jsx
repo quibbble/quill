@@ -90,23 +90,17 @@ export const Game = forwardRef((props, ref) => {
     // display
     const [display, setDisplay] = useState();
 
-    // board must stay at a 7x6 width to height ratio
-    const scale = 0.66;
+    // board must stay at a 3x7 width to height ratio
     const [tileSize, setTileSize] = useState(0);
-    const [width, setWidth] = useState(0);
-    const [height, setHeight] = useState(0);
     const handleResize = useCallback(() => {
-        const width = 3;
-        const height = 7;
+        const scale = 0.97;
+        const w = 7;
+        const h = 7;
         if (!ref || !ref.current) return;
-        if (ref.current.clientHeight/height < ref.current.clientWidth/width) {
-            setWidth(ref.current.clientHeight/height*width*scale);
-            setHeight(ref.current.clientHeight*scale);
-            setTileSize(ref.current.clientHeight/height*scale);
+        if (ref.current.clientHeight/h < ref.current.clientWidth/w) {
+            setTileSize(ref.current.clientHeight/h*scale);
         } else {
-            setWidth(ref.current.clientWidth*scale);
-            setHeight(ref.current.clientWidth/width*height*scale);
-            setTileSize(ref.current.clientWidth/width*scale);
+            setTileSize(ref.current.clientWidth/w*scale);
         }
     }, [ref])
     useEffect(() => handleResize());
@@ -117,11 +111,11 @@ export const Game = forwardRef((props, ref) => {
 
     return (<>{
         team ? 
-            <div className="w-full h-full flex flex-col justify-start items-center grow">
-                <div className="w-full h-full flex flex-row justify-between z-10">
+            <div className="w-full h-full flex flex-col justify-center items-center grow">
+                <div className="w-full h-full flex flex-row justify-between">
                     <div className="grow w-[20%] flex items-center justify-center">
-                        <div className="w-full h-full flex flex-col justify-between">
-                            <div className="w-full flex flex-col items-end">
+                        <div className="w-full h-full flex flex-col justify-between items-end">
+                            <div className="w-full flex flex-col items-end text-xs md:text-base">
                                 <p className="inline-block font-bold"><LuDroplet className="text-blue-500 align-middle inline-flex" /> { mana[opponent].Amount }/{ mana[opponent].BaseAmount }</p>
                                 <p className="inline-block font-bold"><GiCardPick className="text-orange-500 align-middle inline-flex" /> { deck[opponent] }/{ 30 }</p>
                                 <p className="inline-block font-bold"><GiCardRandom className="text-yellow-500 align-middle inline-flex" /> { hand[opponent].length }/{ 10 }</p>
@@ -129,16 +123,16 @@ export const Game = forwardRef((props, ref) => {
                             <div>
                                 <Display data={ display } width={ tileSize*2 } height={ tileSize*3 } />
                             </div>
-                            <div className="w-full flex flex-col items-end">   
+                            <div className="w-full flex flex-col items-end text-xs md:text-base">   
                                 <p className="inline-block font-bold"><LuDroplet className="text-blue-500 align-middle inline-flex" /> { mana[team].Amount }/{ mana[team].BaseAmount }</p>
                                 <p className="inline-block font-bold"><GiCardPick className="text-orange-500 align-middle inline-flex" /> { deck[team] }/{ 30 }</p>
                             </div>
                         </div>
                     </div>
-                    <div className="flex flex-row overflow-hidden bg-zinc-800" style={{width: `${width}px`, height: `${height}px`}}>
+                    <div className="flex flex-row overflow-hidden bg-zinc-800" style={{width: `${tileSize*3}px`, height: `${tileSize*7}px`}}>
                     {
                         board?.map((col, cIdx) =>
-                            <div key={cIdx} className="w-full flex flex-col justify-center" style={{height: `${height}px`}}>
+                            <div key={cIdx} className="w-full flex flex-col justify-center" style={{height: `${tileSize*7}px`}}>
                                 {
                                     col.map((val, i) => range[team][0] != 0 ? val : col[col.length - 1 - i]).map((tile, rIdx) =>
                                         <div key={`${rIdx},${cIdx}`} className="flex items-center justify-center" style={{width: `${tileSize}px`, height: `${tileSize}px`}}>
@@ -162,10 +156,10 @@ export const Game = forwardRef((props, ref) => {
                     } 
                     </div>
                     <div className="grow w-[20%] flex flex-col justify-between">
-                        <div className="h-64 w-full">
+                        <div className="h-36 md:h-64 w-full">
                             <Log logs={ logs } />
                         </div>
-                        <div className="flex flex-col gap-1">
+                        <div className="flex flex-col gap-1 text-xs md:text-base">
                             <button className={`p-2 rounded-sm box-border ${game.Turn == team && (current.length > 0 || sack) ? "bg-amber-500" : "bg-zinc-900"}`} onClick={() => {
                                 if (game.Turn == team && (current.length > 0 || sack)) {
                                     setSack()

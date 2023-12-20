@@ -14,7 +14,7 @@ export const Card = forwardRef((props, ref) => {
                 { 
                     data.Init.ID[0] == "U" ? 
                         <Unit hand={ true } {...props} /> :
-                        <div className="text-xs font-bold flex flex-col items-start justify-center w-full p-2">
+                        <div className="font-bold flex flex-col items-start justify-center w-full p-2 text-3xs md:text-xs">
                             <p className={`flex items-center justify-center ${ data.Cost > data.Init.Cost ? "text-green-500" : data.Cost < data.Init.Cost ? "text-red-500" : "" }`}><LuDroplet className="text-blue-500" /> { data.Cost }</p>
                             <div className={`${target ? `text-${ team }-100` : `text-${ team }-500`} flex`}>{ data.Init.Name }</div> 
                         </div>
