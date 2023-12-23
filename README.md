@@ -1,8 +1,7 @@
 # Quill
 
 ## TODO
-- Add extra options to boardgame pkg to allow for deck list
-- Add deck builder
+- Fix screen sizing on deck builder on smaller screens
 
 KEYWORDS
 - Attack

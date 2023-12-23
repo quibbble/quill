@@ -3,6 +3,8 @@ import { Route, Routes, BrowserRouter } from "react-router-dom";
 import { GamePage, HomePage, DownPage, RulesPage, BugsPage } from "@quibbble/boardgame";
 import { Game } from "./game/Game";
 import Rules from "./rules.md";
+import { DeckOptions } from "./builder/DeckOptions";
+import { DeckBuilderPage } from "./builder/DeckBuilderPage";
 
 const config = {
   // server attributes
@@ -35,6 +37,19 @@ export default function App() {
 
     const [rules, setRules] = useState("");
 
+    const [options, setOptions] = useState({
+      Seed: Date.now(),
+      Decks: [[
+        "S0001", "S0001", "S0002", "S0002", "S0003", "S0003", "S0004", "S0004", "S0006", "S0009",
+        "I0002", "I0002", "I0007", "I0008", "U0002", "U0002", "U0003", "U0003", "U0004", "U0004",
+        "U0005", "U0005", "U0006", "U0006", "U0007", "U0007", "U0008", "U0008", "U0010", "U0010"
+      ], [
+        "S0001", "S0001", "S0002", "S0002", "S0003", "S0003", "S0004", "S0004", "S0006", "S0009",
+        "I0002", "I0002", "I0007", "I0008", "U0002", "U0002", "U0003", "U0003", "U0004", "U0004",
+        "U0005", "U0005", "U0006", "U0006", "U0007", "U0007", "U0008", "U0008", "U0010", "U0010"
+      ]]
+    })
+
     useLayoutEffect(() => {
       fetch(Rules)
         .then(response => response.text())
@@ -59,10 +74,17 @@ export default function App() {
               </GamePage>
             }
           />
+          <Route exact path="/build" element={ <DeckBuilderPage config={ config } ref={ ref } /> }/>
           <Route exact path="/status/down" element={ <DownPage config={ config } /> }/>
           <Route exact path="/rules" element={ <RulesPage config={ config } rules={ rules } /> }/>
           <Route exact path="/bugs" element={ <BugsPage config={ config } /> }/>
-          <Route path="/" element={ <HomePage config={ config } /> } />
+          <Route path="/" element=
+          { 
+            <HomePage config={ config } options={ options } setOptions={ setOptions }>
+              <DeckOptions setOptions={ setOptions }/>
+            </HomePage>
+          } 
+          />
         </Routes>
       </BrowserRouter>
     );

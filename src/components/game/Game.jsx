@@ -121,7 +121,7 @@ export const Game = forwardRef((props, ref) => {
                                 <p className="inline-block font-bold"><GiCardRandom className="text-yellow-500 align-middle inline-flex" /> { hand[opponent].length }/{ 10 }</p>
                             </div>
                             <div>
-                                <Display data={ display } width={ tileSize*2 } height={ tileSize*3 } />
+                                <Display data={ display } width={ tileSize*2 } height={ tileSize*3 } scale={ ref && ref.current && ref.current.clientWidth < 400 ? .65 : .9 } />
                             </div>
                             <div className="w-full flex flex-col items-end text-xs md:text-base">   
                                 <p className="inline-block font-bold"><LuDroplet className="text-blue-500 align-middle inline-flex" /> { mana[team].Amount }/{ mana[team].BaseAmount }</p>
