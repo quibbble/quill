@@ -132,7 +132,7 @@ export const DeckBuilderPage = forwardRef(({ config }, ref) => {
                                             }
                                         </div>
                                         <div className="flex flex-col justify-between w-[25%] h-full gap-1 bg-zinc-900 p-2 rounded-sm ">
-                                            <div className="flex rounded-sm overflow-hidden h-full">
+                                            <div className="flex rounded-sm overflow-hidden h-8">
                                                 <input className="flex w-full font-bold bg-zinc-800 border-none outline-none px-2" type="text" value={ decks[selected].Name } onChange={e => {
                                                     setDecks(decks => decks.map((deck, i) => {
                                                         if (selected != i) return deck
