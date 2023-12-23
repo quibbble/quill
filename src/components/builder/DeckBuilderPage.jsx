@@ -4,7 +4,6 @@ import axios from 'axios';
 import { Tooltip } from 'react-tooltip'
 import { BuildStat, Display } from "../game/Display";
 import { ImArrowRight, ImArrowLeft } from "react-icons/im";
-import { AiFillCaretRight, AiFillCaretLeft } from "react-icons/ai";
 
 axios.defaults.withCredentials = true
 
