@@ -191,7 +191,7 @@ export const Display = forwardRef((props, ref) => {
         <>
         {
             data && data.Init ? 
-                <div>
+                <div className="select-none">
                     <div className={`bg-zinc-900 rounded-sm p-2 flex flex-col h-full justify-between`} style={{ width: width, height: height }} {...other}>
                         <div>
                             <div className={`flex justify-between font-bold`} style={{ fontSize: `${1 * scale}rem`, lineHeight: `${1.5*scale}rem` }}>
