@@ -1,7 +1,7 @@
 import React, { useEffect, useState, forwardRef, useCallback, cloneElement } from "react";
 import reactStringReplace from 'react-string-replace';
 import { LuSword, LuHourglass, LuHeart, LuDroplet } from "react-icons/lu";
-import { GiCrossbow, GiAura, GiNightSleep, GiPresent, GiAssassinPocket, GiRun, GiPoison, GiWalkingBoot, GiSpikedArmor, GiHoodedFigure, GiMoebiusStar, GiCatapult, GiStarSkull, GiCloudRing, GiHeavenGate, GiPencilRuler, GiDodge, GiPencil } from "react-icons/gi";
+import { GiCrossbow, GiAura, GiNightSleep, GiPresent, GiAssassinPocket, GiRun, GiPoison, GiWalkingBoot, GiSpikedArmor, GiHoodedFigure, GiMoebiusStar, GiCatapult, GiStarSkull, GiCloudRing, GiHeavenGate, GiPencilRuler, GiDodge, GiPencil, GiLightningTrio, GiSkullCrack, GiBugleCall, GiEnrage, GiTowerFlag } from "react-icons/gi";
 import { BsStars } from "react-icons/bs";
 import { MdShield } from "react-icons/md";
 import { FaHandshakeSimple, FaHandshakeSimpleSlash } from "react-icons/fa6";
@@ -30,6 +30,7 @@ const buildDescription = (text) => {
     replaced = reactStringReplace(replaced, "'Movement'", (match, i) => BuildStat(match.substring(1, match.length-1), i))
     replaced = reactStringReplace(replaced, "'BaseMovement'", (match, i) => BuildStat(match.substring(1, match.length-1), i))
     replaced = reactStringReplace(replaced, "'Mana'", (match, i) => BuildStat(match.substring(1, match.length-1), i))
+    replaced = reactStringReplace(replaced, "'BaseMana'", (match, i) => BuildStat(match.substring(1, match.length-1), i))
     replaced = reactStringReplace(replaced, "'Codex'", (match, i) => BuildStat(match.substring(1, match.length-1), i))
 
     return replaced
@@ -39,11 +40,12 @@ export const BuildStat = (type, i) => {
     const m = {
         "Attack": <LuSword className="text-red-500 align-middle inline-flex" />,
         "Cooldown": <LuHourglass className="text-amber-500 align-middle inline-flex" />,
-        "BaseCooldown": <LuHourglass className="text-amber-500 align-middle inline-flex" />,
+        "BaseCooldown": <LuHourglass className="text-zinc-100 align-middle inline-flex" />,
         "Movement": <GiWalkingBoot className="text-yellow-500 align-middle inline-flex" />,
-        "BaseMovement": <GiWalkingBoot className="text-yellow-500 align-middle inline-flex" />,
+        "BaseMovement": <GiWalkingBoot className="text-zinc-100 align-middle inline-flex" />,
         "Health": <LuHeart className="text-green-500 align-middle inline-flex" />,
         "Mana":  <LuDroplet className="text-blue-500 align-middle inline-flex" />,
+        "BaseMana":  <LuDroplet className="text-zinc-100 align-middle inline-flex" />,
         "Codex":  <GiPencil className="text-purple-500 align-middle inline-flex" />,
     }
     return m[type] ? React.cloneElement(m[type], { key: `${ type + i }` }) : null
@@ -87,31 +89,43 @@ export const Display = forwardRef((props, ref) => {
 
     const buildTrait = (trait, i, enableTooltip) => {
         // THe following traits are not currently added
-        // BattleCry, DeathCry, Enrage, Eternal, Pillage
+        // Eternal
         const m = {
             "Assassin": {
-                color: "red-500", icon: (args) => <div><GiAssassinPocket /> { args.Amount }</div>, 
-                text: (args) => <>Attacking a unit from behind deals { args.Amount } extra damage.</>
+                color: "red-500", icon: (args) => <div><GiAssassinPocket className="align-middle inline-flex" /> { args.Amount }</div>, 
+                text: (args) => <>attacking a unit from behind deals { args.Amount } extra damage.</>
+            },
+            "BattleCry": {
+                color: "yellow-500", icon: (args) => <div><GiBugleCall className="align-middle inline-flex mr-1" /><span className="text-zinc-100" style={{ fontSize: `${.875 * scale}rem`, lineHeight: `${1.25*scale}rem` }}>{ buildDescription(args.Description) }</span></div>, 
+                text: (_) => <>on place or summon do X</>
             },
             "Berserk": {
-                color: "orange-500", icon: (_) => <GiAura />, 
+                color: "orange-500", icon: (_) => <GiAura className="align-middle inline-flex" />, 
                 text: (_) => <>killing a unit resets <LuHourglass className="text-amber-500 align-middle inline-flex" /> to 0</>
             },
             "Buff": {
                 color: "green-500", icon: (args) => <div>{ BuildStat(args.Stat) } { args.Amount }</div>, 
                 text: (args) => <>increase { BuildStat(args.Stat) } by { args.Amount }</>
             },
+            "DeathCry": {
+                color: "orange-500", icon: (args) => <div><GiSkullCrack className="align-middle inline-flex mr-1" /><span className="text-zinc-100" style={{ fontSize: `${.875 * scale}rem`, lineHeight: `${1.25*scale}rem` }}>{ buildDescription(args.Description) }</span></div>, 
+                text: (_) => <>on death do X</>
+            },
             "Debuff": {
                 color: "red-500", icon: (args) => <div>{ BuildStat(args.Stat) } { args.Amount }</div>, 
                 text: (args) => <>decrease { BuildStat(args.Stat) } by { args.Amount }</>
             },
             "Dodge": {
-                color: "red-500", icon: (_) => <GiDodge className="align-middle inline-flex" />, 
+                color: "lime-500", icon: (_) => <GiDodge className="align-middle inline-flex" />, 
                 text: (_) => <>incoming attacks have a 1 in 3 chance of missing</>
             },
             "Enemies": {
                 color: "orange-500", icon: (args) => <div><div className="flex items-center justify-center gap-1"><FaHandshakeSimpleSlash className="align-middle inline-flex"/>{ buildTrait(args.Trait, i, false) }</div></div>, 
                 text: (args) => <div className="flex gap-1">{ args.ChooseUnits.Type.toLowerCase() } enemies gain { buildTrait(args.Trait) }</div>
+            },
+            "Enrage": {
+                color: "red-500", icon: (args) => <div><GiEnrage className="align-middle inline-flex mr-1" /><span className="text-zinc-100" style={{ fontSize: `${.875 * scale}rem`, lineHeight: `${1.25*scale}rem` }}>{ buildDescription(args.Description) }</span></div>, 
+                text: (_) => <>on being damaged do X</>
             },
             "Execute": {
                 color: "red-500", icon: (_) => <GiStarSkull className="align-middle inline-flex" />, 
@@ -122,7 +136,7 @@ export const Display = forwardRef((props, ref) => {
                 text: (args) => <div className="flex gap-1">{ args.ChooseUnits.Type.toLowerCase() } allies gain { buildTrait(args.Trait) }</div>
             },
             "Gift": {
-                color: "indigo-500", icon: (args) => <div><div className="flex items-center justify-center gap-1"><GiPresent className="align-middle inline-flex"/>{ buildTrait(args.Trait, i, false) }</div></div>, 
+                color: "indigo-500", icon: (args) => <div><div className="flex items-center justify-center"><GiPresent className="align-middle inline-flex"/>{ buildTrait(args.Trait, i, false) }</div></div>, 
                 text: (args) => <div className="flex gap-1">on attack give unit { buildTrait(args.Trait) }</div>
             },
             "Haste": {
@@ -132,6 +146,10 @@ export const Display = forwardRef((props, ref) => {
             "Lobber": {
                 color: "yellow-500", icon: (_) => <GiCatapult className="align-middle inline-flex" />,
                 text: (_) => <>ranged unit deals damage to target and all adjacent units</>
+            },
+            "Pillage": {
+                color: "yellow-500", icon: (args) => <div><GiTowerFlag className="align-middle inline-flex mr-1" /><span className="text-zinc-100" style={{ fontSize: `${.875 * scale}rem`, lineHeight: `${1.25*scale}rem` }}>{ buildDescription(args.Description) }</span></div>, 
+                text: (args) => <>on damaging a base do X</>
             },
             "Poison": {
                 color: "purple-500", icon: (args) => <div><GiPoison className="align-middle inline-flex" /> { args.Amount }</div>,
@@ -147,7 +165,7 @@ export const Display = forwardRef((props, ref) => {
             },
             "Recode": {
                 color: "indigo-500", icon: (_) => <GiPencilRuler className="align-middle inline-flex" />,
-                text: (_) => <>can move in all directions</>
+                text: (_) => <>codex is valid in all directions</>
             },
             "Shield": {
                 color: "amber-500", icon: (args) => <div><MdShield className="align-middle inline-flex" /> { args.Amount }</div>,
@@ -157,9 +175,13 @@ export const Display = forwardRef((props, ref) => {
                 color: "red-500", icon: (args) => <div><GiSpikedArmor className="align-middle inline-flex" /> { args.Amount }</div>,
                 text: (args) => <>when attacked deal { args.Amount } extra { buildDamageType("Physical", 0) } damage</>
             },
+            "Surge": {
+                color: "yellow-500", icon: (_) => <GiLightningTrio className="align-middle inline-flex" />,
+                text: (_) => <>gain { BuildStat("Attack", 0) } equal to current mana pool</>
+            },
             "Thief": {
                 color: "indigo-500", icon: (_) => <GiHoodedFigure className="align-middle inline-flex" />,
-                text: (_) => <>steal an item instead of attacking</>
+                text: (_) => <>if possible steal an item instead of attacking</>
             },
             "Tired": {
                 color: "blue-500", icon: (_) => <GiNightSleep className="align-middle inline-flex" />,
@@ -208,9 +230,9 @@ export const Display = forwardRef((props, ref) => {
                                 }
                                 
                             </div>
-                            <div className="flex flex-col mt-4 break-words" style={{ fontSize: `${.875 * scale}rem`, lineHeight: `${1.25*scale}rem` }}>
-                                <p className="inline-block break-words">{ buildDescription(data.Init.Description) }</p>
-                                <div className={`flex-wrap flex items-center justify-center gap-1 ${ data.Init.Description && data.Init.ID[0] != "I" && data.Traits.length > 0 ? "mt-4" : "mt-0" }`} style={{ fontSize: `${.875 * scale}rem`, lineHeight: `${1.25*scale}rem` }}>
+                            <div className="flex flex-col mt-4 break-words" style={{ fontSize: `${1 * scale}rem`, lineHeight: `${1.5*scale}rem` }}>
+                                <p className="inline-block break-words" style={{ fontSize: `${.875 * scale}rem`, lineHeight: `${1.25*scale}rem` }}>{ buildDescription(data.Init.Description) }</p>
+                                <div className={`flex-wrap flex items-center justify-center gap-1 ${ data.Init.Description && data.Init.ID[0] != "I" && data.Traits.length > 0 ? "mt-4" : "mt-0" }`}>
                                     {
                                         data.Traits.map((trait, i) => 
                                             <div key={ i } className={`${ trait.CreatedBy == data.UUID ? "bg-transparent" : "bg-slate-800" } rounded-sm px-1`}>
@@ -219,7 +241,7 @@ export const Display = forwardRef((props, ref) => {
                                         )
                                     }
                                 </div>
-                                <div className={`flex-wrap flex items-center justify-center gap-1 ${ data.Init.Description && data.HeldTraits && data.HeldTraits.length > 0 ? "mt-4" : "mt-0" }`} style={{ fontSize: `${.875 * scale}rem`, lineHeight: `${1.25*scale}rem` }}>
+                                <div className={`flex-wrap flex items-center justify-center gap-1 ${ data.Init.Description && data.HeldTraits && data.HeldTraits.length > 0 ? "mt-4" : "mt-0" }`}>
                                     {
                                         data.HeldTraits && data.HeldTraits.length > 0 ? 
                                             <>
