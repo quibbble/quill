@@ -1,10 +1,11 @@
 import React, { useEffect, useState, forwardRef, useCallback, cloneElement } from "react";
 import reactStringReplace from 'react-string-replace';
 import { LuSword, LuHourglass, LuHeart, LuDroplet } from "react-icons/lu";
-import { GiCrossbow, GiAura, GiNightSleep, GiPresent, GiAssassinPocket, GiRun, GiPoison, GiWalkingBoot, GiSpikedArmor, GiHoodedFigure, GiMoebiusStar, GiCatapult, GiStarSkull, GiCloudRing, GiHeavenGate, GiPencilRuler, GiDodge, GiPencil, GiLightningTrio, GiSkullCrack, GiBugleCall, GiEnrage, GiTowerFlag } from "react-icons/gi";
+import { GiCrossbow, GiAura, GiNightSleep, GiPresent, GiAssassinPocket, GiRun, GiPoison, GiWalkingBoot, GiSpikedArmor, GiHoodedFigure, GiMoebiusStar, GiCatapult, GiStarSkull, GiCloudRing, GiHeavenGate, GiPencilRuler, GiDodge, GiPencil, GiLightningTrio, GiSkullCrack, GiBugleCall, GiEnrage, GiTowerFlag, GiWalk, GiHearts, GiHourglass, GiPointySword, GiDrop, GiWaterDrop, GiCobra, GiBroadsword, GiBootPrints } from "react-icons/gi";
 import { BsStars } from "react-icons/bs";
 import { MdShield } from "react-icons/md";
 import { FaHandshakeSimple, FaHandshakeSimpleSlash } from "react-icons/fa6";
+import { PiBoot } from "react-icons/pi";
 import { Tooltip } from 'react-tooltip'
 
 const buildDescription = (text) => {
@@ -38,14 +39,14 @@ const buildDescription = (text) => {
 
 export const BuildStat = (type, i) => {
     const m = {
-        "Attack": <LuSword className="text-red-500 align-middle inline-flex" />,
-        "Cooldown": <LuHourglass className="text-amber-500 align-middle inline-flex" />,
-        "BaseCooldown": <LuHourglass className="text-zinc-100 align-middle inline-flex" />,
+        "Attack": <GiBroadsword className="text-red-500 align-middle inline-flex" />,
+        "Cooldown": <GiHourglass className="text-amber-500 align-middle inline-flex" />,
+        "BaseCooldown": <GiHourglass className="text-zinc-100 align-middle inline-flex" />,
         "Movement": <GiWalkingBoot className="text-yellow-500 align-middle inline-flex" />,
         "BaseMovement": <GiWalkingBoot className="text-zinc-100 align-middle inline-flex" />,
-        "Health": <LuHeart className="text-green-500 align-middle inline-flex" />,
-        "Mana":  <LuDroplet className="text-blue-500 align-middle inline-flex" />,
-        "BaseMana":  <LuDroplet className="text-zinc-100 align-middle inline-flex" />,
+        "Health": <GiHearts className="text-green-500 align-middle inline-flex" />,
+        "Mana":  <GiWaterDrop className="text-blue-500 align-middle inline-flex" />,
+        "BaseMana":  <GiWaterDrop className="text-zinc-100 align-middle inline-flex" />,
         "Codex":  <GiPencil className="text-purple-500 align-middle inline-flex" />,
     }
     return m[type] ? React.cloneElement(m[type], { key: `${ type + i }` }) : null
@@ -64,7 +65,7 @@ const buildUnitType = (type, i) => {
 const buildDamageType = (type, i) => {
     const m = {
         "Magic": <BsStars className="text-blue-500 align-middle inline-flex" />,
-        "Poison": <GiPoison className="text-purple-500 align-middle inline-flex" />,
+        "Poison": <GiCobra className="text-purple-500 align-middle inline-flex" />,
         "Physical": <LuSword className="text-red-500 align-middle inline-flex" />,
         "Ranged": <GiCrossbow className="text-orange-500 align-middle inline-flex" />,
         "Pure": <GiCloudRing className="text-slate-200 align-middle inline-flex" />,
@@ -91,13 +92,17 @@ export const Display = forwardRef((props, ref) => {
         // THe following traits are not currently added
         // Eternal
         const m = {
+            "Aimless": {
+                color: "yellow-500", icon: (_) => <GiBootPrints className="align-middle inline-flex" />,
+                text: (_) => <>codex is ranomized each turn.</>
+            },
             "Assassin": {
                 color: "red-500", icon: (args) => <div><GiAssassinPocket className="align-middle inline-flex" /> { args.Amount }</div>, 
                 text: (args) => <>attacking a unit from behind deals { args.Amount } extra damage.</>
             },
             "BattleCry": {
                 color: "yellow-500", icon: (args) => <div><GiBugleCall className="align-middle inline-flex mr-1" /><span className="text-zinc-100" style={{ fontSize: `${.875 * scale}rem`, lineHeight: `${1.25*scale}rem` }}>{ buildDescription(args.Description) }</span></div>, 
-                text: (_) => <>on place or summon do X</>
+                text: (args) => <>on place or summon { buildDescription(args.Description) }</>
             },
             "Berserk": {
                 color: "orange-500", icon: (_) => <GiAura className="align-middle inline-flex" />, 
@@ -109,7 +114,7 @@ export const Display = forwardRef((props, ref) => {
             },
             "DeathCry": {
                 color: "orange-500", icon: (args) => <div><GiSkullCrack className="align-middle inline-flex mr-1" /><span className="text-zinc-100" style={{ fontSize: `${.875 * scale}rem`, lineHeight: `${1.25*scale}rem` }}>{ buildDescription(args.Description) }</span></div>, 
-                text: (_) => <>on death do X</>
+                text: (args) => <>on death { buildDescription(args.Description) }</>
             },
             "Debuff": {
                 color: "red-500", icon: (args) => <div>{ BuildStat(args.Stat) } { args.Amount }</div>, 
@@ -125,7 +130,7 @@ export const Display = forwardRef((props, ref) => {
             },
             "Enrage": {
                 color: "red-500", icon: (args) => <div><GiEnrage className="align-middle inline-flex mr-1" /><span className="text-zinc-100" style={{ fontSize: `${.875 * scale}rem`, lineHeight: `${1.25*scale}rem` }}>{ buildDescription(args.Description) }</span></div>, 
-                text: (_) => <>on being damaged do X</>
+                text: (args) => <>on taking damage { buildDescription(args.Description) }</>
             },
             "Execute": {
                 color: "red-500", icon: (_) => <GiStarSkull className="align-middle inline-flex" />, 
@@ -149,10 +154,10 @@ export const Display = forwardRef((props, ref) => {
             },
             "Pillage": {
                 color: "yellow-500", icon: (args) => <div><GiTowerFlag className="align-middle inline-flex mr-1" /><span className="text-zinc-100" style={{ fontSize: `${.875 * scale}rem`, lineHeight: `${1.25*scale}rem` }}>{ buildDescription(args.Description) }</span></div>, 
-                text: (args) => <>on damaging a base do X</>
+                text: (args) => <>on damaging a base { buildDescription(args.Description) }</>
             },
             "Poison": {
-                color: "purple-500", icon: (args) => <div><GiPoison className="align-middle inline-flex" /> { args.Amount }</div>,
+                color: "purple-500", icon: (args) => <div><GiCobra className="align-middle inline-flex" /> { args.Amount }</div>,
                 text: (args) => <>on turn end take { args.Amount } { buildDamageType("Magic", 0) } damage</>
             },
             "Purity": {
@@ -218,7 +223,7 @@ export const Display = forwardRef((props, ref) => {
                         <div>
                             <div className={`flex justify-between font-bold`} style={{ fontSize: `${1 * scale}rem`, lineHeight: `${1.5*scale}rem` }}>
                                 <p>{data.Init.Name}</p>
-                                <p className={`flex items-center justify-center ${ data.Cost > data.Init.Cost ? "text-green-500" : data.Cost < data.Init.Cost ? "text-red-500" : "" }`}><LuDroplet className="text-blue-500" /> { data.Cost }</p>
+                                <p className={`flex items-center justify-center ${ data.Cost > data.Init.Cost ? "text-green-500" : data.Cost < data.Init.Cost ? "text-red-500" : "" }`}>{ BuildStat("Mana") } { data.Cost }</p>
                             </div>
                             <div className="flex justify-between" style={{ fontSize: `${.875 * scale}rem`, lineHeight: `${1.25*scale}rem` }}>
                                 {
@@ -270,9 +275,10 @@ export const Display = forwardRef((props, ref) => {
                                         <div className={`${ CodexBotLeft } border-b-${ BuildCodexColor(data?.Codex[6]) }`}/>                
                                         <div className={`${ CodexTopRight } border-b-${ BuildCodexColor(data?.Codex[7]) }`}/>
                                     </div>
-                                    <div className="flex justify-between font-bold w-full px-[.5rem] md:px-[.75rem] pb-[1rem] md:pb-[1.5rem]" style={{ fontSize: `${1 * scale}rem`, lineHeight: `${1.5*scale}rem` }}>
+                                    <div className="flex justify-between font-bold w-full px-[.5rem] pb-[1rem] md:pb-[1.25rem]" style={{ fontSize: `${1 * scale}rem`, lineHeight: `${1.5*scale}rem` }}>
                                         <p className={`flex items-center justify-center ${ data.Attack > data.Init.Attack ? "text-green-500" : data.Attack < data.Init.Attack ? "text-red-500" : "" }`}>{ BuildStat("Attack") } { data.Attack }</p>
                                         <p className={`flex items-center justify-center ${ data.Cooldown > data.Init.Cooldown ? "text-red-500" : data.Cooldown < data.Init.Cooldown ? "text-green-500" : "" }`}>{ BuildStat("Cooldown") } { data.Cooldown > 0 ? data.Cooldown : 0 }</p>
+                                        <p className={`flex items-center justify-center ${ data.Movement > data.Init.Movement ? "text-red-500" : data.Movement < data.Init.Movement ? "text-green-500" : "" }`}>{ BuildStat("Movement") } { data.Movement > 0 ? data.Movement : 0 }</p>
                                         <p className={`flex items-center justify-center ${ data.Health > data.Init.Health ? "text-green-500" : data.Health < data.Init.Health ? "text-red-500" : "" }`}>{ BuildStat("Health") } { data.Health }</p>
                                     </div>
                                 </div> : null
