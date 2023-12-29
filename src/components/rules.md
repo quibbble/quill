@@ -6,7 +6,7 @@ Play cards and control the battlefield to defeat your opponent.
 
 ## Components 🧱
 
-- A 30 card deck
+- 2 30 card decks (1 per team)
 - 6 base cards (3 per team)
 - A 7x3 game board
 - 2 mana pools (1 per team)
