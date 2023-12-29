@@ -100,7 +100,7 @@ export const Display = forwardRef((props, ref) => {
             },
             "BattleCry": {
                 color: "yellow-500", icon: (args) => <div><GiBugleCall className="align-middle inline-flex mr-1" /><span className="text-zinc-100" style={{ fontSize: `${.875 * scale}rem`, lineHeight: `${1.25*scale}rem` }}>{ buildDescription(args.Description) }</span></div>, 
-                text: (args) => <>on place or summon { buildDescription(args.Description) }</>
+                text: (args) => <>on place { buildDescription(args.Description) }</>
             },
             "Berserk": {
                 color: "orange-500", icon: (_) => <GiAura className="align-middle inline-flex" />, 
