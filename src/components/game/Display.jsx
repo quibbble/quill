@@ -1,11 +1,9 @@
 import React, { useEffect, useState, forwardRef, useCallback, cloneElement } from "react";
 import reactStringReplace from 'react-string-replace';
-import { LuSword, LuHourglass, LuHeart, LuDroplet } from "react-icons/lu";
-import { GiCrossbow, GiAura, GiNightSleep, GiPresent, GiAssassinPocket, GiRun, GiPoison, GiWalkingBoot, GiSpikedArmor, GiHoodedFigure, GiMoebiusStar, GiCatapult, GiStarSkull, GiCloudRing, GiHeavenGate, GiPencilRuler, GiDodge, GiPencil, GiLightningTrio, GiSkullCrack, GiBugleCall, GiEnrage, GiTowerFlag, GiWalk, GiHearts, GiHourglass, GiPointySword, GiDrop, GiWaterDrop, GiCobra, GiBroadsword, GiBootPrints } from "react-icons/gi";
+import { GiCrossbow, GiAura, GiNightSleep, GiPresent, GiAssassinPocket, GiRun, GiWalkingBoot, GiSpikedArmor, GiHoodedFigure, GiMoebiusStar, GiCatapult, GiStarSkull, GiCloudRing, GiHeavenGate, GiPencilRuler, GiDodge, GiPencil, GiLightningTrio, GiSkullCrack, GiBugleCall, GiEnrage, GiTowerFlag, GiHearts, GiHourglass, GiWaterDrop, GiCobra, GiBroadsword, GiBootPrints } from "react-icons/gi";
 import { BsStars } from "react-icons/bs";
 import { MdShield } from "react-icons/md";
 import { FaHandshakeSimple, FaHandshakeSimpleSlash } from "react-icons/fa6";
-import { PiBoot } from "react-icons/pi";
 import { Tooltip } from 'react-tooltip'
 
 const buildDescription = (text) => {
@@ -66,7 +64,7 @@ const buildDamageType = (type, i) => {
     const m = {
         "Magic": <BsStars className="text-blue-500 align-middle inline-flex" />,
         "Poison": <GiCobra className="text-purple-500 align-middle inline-flex" />,
-        "Physical": <LuSword className="text-red-500 align-middle inline-flex" />,
+        "Physical": <GiBroadsword className="text-red-500 align-middle inline-flex" />,
         "Ranged": <GiCrossbow className="text-orange-500 align-middle inline-flex" />,
         "Pure": <GiCloudRing className="text-slate-200 align-middle inline-flex" />,
     }
@@ -106,7 +104,7 @@ export const Display = forwardRef((props, ref) => {
             },
             "Berserk": {
                 color: "orange-500", icon: (_) => <GiAura className="align-middle inline-flex" />, 
-                text: (_) => <>killing a unit resets <LuHourglass className="text-amber-500 align-middle inline-flex" /> to 0</>
+                text: (_) => <>killing a unit resets { BuildStat("Cooldown", 0) } to 0</>
             },
             "Buff": {
                 color: "green-500", icon: (args) => <div>{ BuildStat(args.Stat) } { args.Amount }</div>, 
@@ -134,7 +132,7 @@ export const Display = forwardRef((props, ref) => {
             },
             "Execute": {
                 color: "red-500", icon: (_) => <GiStarSkull className="align-middle inline-flex" />, 
-                text: (_) => <>on attack if a unit is injured kill it</>
+                text: (_) => <>on attack if a unit is already injured kill it</>
             },
             "Friends": {
                 color: "blue-500", icon: (args) => <div><div className="flex items-center justify-center gap-1"><FaHandshakeSimple className="align-middle inline-flex"/>{ buildTrait(args.Trait, i, false) }</div></div>, 

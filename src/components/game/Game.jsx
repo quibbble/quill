@@ -11,6 +11,8 @@ export const Game = forwardRef((props, ref) => {
     // eslint-disable-next-line no-unused-vars
     const { ws, game, network, chat, connected, error } = props;
 
+    console.log(game)
+
     // websocket messages
     const nextTargets = (team, targets) => {
         if (!ws.current) return;
@@ -53,7 +55,6 @@ export const Game = forwardRef((props, ref) => {
     useEffect(() => {
         setTargets(game ? game.Targets : [])
     }, [game])
-    // let targets = game?.Targets
 
     // targeting
     const [current, setCurrent] = useState([]);
@@ -209,6 +210,6 @@ export const Game = forwardRef((props, ref) => {
                     }
                 </div>
             </div>
-        : null
+        : <div>Select a team to play</div>
         }</>)
 })

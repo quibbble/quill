@@ -1,2 +1,2 @@
-https://connect4.quibbble.com
-https://connect4.quibbble.com/rules
+https://quill.quibbble.com
+https://quill.quibbble.com/rules
