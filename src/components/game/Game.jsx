@@ -11,8 +11,6 @@ export const Game = forwardRef((props, ref) => {
     // eslint-disable-next-line no-unused-vars
     const { ws, game, network, chat, connected, error } = props;
 
-    console.log(game)
-
     // websocket messages
     const nextTargets = (team, targets) => {
         if (!ws.current) return;
